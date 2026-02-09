@@ -1,24 +1,73 @@
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { Stack } from 'expo-router';
+import { Stack, useSegments, Redirect } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
+import { useEffect } from 'react'
+import * as SplashScreen from 'expo-splash-screen'
+
 import 'react-native-reanimated';
 
 import { useColorScheme } from '@/hooks/use-color-scheme';
+import { AuthProvider, useAuth } from '@/contexts/auth-context';
+import { ActivityIndicator, View, StyleSheet} from 'react-native';
 
-export const unstable_settings = {
-  anchor: '(tabs)',
-};
+// Keep the splash screen visible while we fetch resources
+SplashScreen.preventAutoHideAsync();
 
-export default function RootLayout() {
-  const colorScheme = useColorScheme();
+function RootLayoutNav() {
+  const colorScheme = useColorScheme()
+  const { user, loading, } = useAuth();
+  const segments = useSegments();
+
+  useEffect(() => {
+    if(!loading) {
+      SplashScreen.hideAsync();
+    }
+  }, [loading])
+
+  if(loading) {
+    return null;
+  }
+
+  const inAuthGroup = segments.length > 0 && segments[0] === 'auth';
+
+  // Redirect BEFORE rendering the Stack — no flash
+  if (!user && !inAuthGroup) {
+    return <Redirect href="/auth/login" />;
+  }
+  if (user && inAuthGroup) {
+    return <Redirect href="/(tabs)" />;
+  }
 
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+      <Stack screenOptions={{ headerShown: false }}>
+       <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen name="auth/login" options={{ headerShown: false,
+        animation: 'none'
+        }} />
+        <Stack.Screen name="auth/signup" options={{ headerShown: false,
+        animation: 'none'
+        }} />
         <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
       </Stack>
       <StatusBar style="auto" />
     </ThemeProvider>
   );
 }
+
+export default function RootLayout() {
+  return (
+    <AuthProvider>
+      <RootLayoutNav />
+    </AuthProvider>
+  )
+}
+
+const styles = StyleSheet.create({
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#fff'
+  }
+})

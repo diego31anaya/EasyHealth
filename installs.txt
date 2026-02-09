@@ -1,13 +1,25 @@
 npx expo install expo-dev-client
 npx expo install expo-camera
 
+npx expo install @supabase/supabase-js
+npx expo install expo-secure-store
+npx expo install expo-linking expo-web-browser
+
+npx expo install @react-native-async-storage/async-storage
+npm install react-native-url-polyfill
+
+npx expo install expo-splash-screen
 
 
 TO GET YOUR APP ON IPHONE
 TURN ON DEVELOPER MODE ON IPHONE
-npx expo prebuild --clean -> DO THIS ONCE
+npx expo prebuild --clean 
  
-npx expo run:ios --device
+npx expo run:ios --device 
 
 ONCE THE PREVIOUS STEPS ARE DONE TO RUN THE APP DO
 npx expo start --dev-client
+
+TO REBUILD APP
+npx expo prebuild --clean
+npx expo run:ios --device
