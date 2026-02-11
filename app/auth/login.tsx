@@ -39,10 +39,7 @@ export default function LoginScreen() {
 
     if (error) {
       Alert.alert('Login Failed', error.message);
-    } else {
-      // Navigation is handled by auth state change
-      router.replace('/(tabs)');
-    }
+    } 
   };
 
   return (
@@ -89,7 +86,7 @@ export default function LoginScreen() {
               onPress={handleLogin}
               disabled={loading}>
               {loading ? (
-                <ActivityIndicator color="#fff" />
+                <ActivityIndicator color={textColor} />
               ) : (
                 <ThemedText style={styles.buttonText}>Sign In</ThemedText>
               )}
@@ -154,7 +151,6 @@ const styles = StyleSheet.create({
     marginTop: 8,
   },
   buttonText: {
-    color: '#fff',
     fontSize: 16,
     fontWeight: '600',
   },

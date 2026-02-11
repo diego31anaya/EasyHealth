@@ -10,6 +10,15 @@ npm install react-native-url-polyfill
 
 npx expo install expo-splash-screen
 
+npm install aes-js react-native-get-random-values
+npm install --save-dev @types/aes-js
+
+npx expo install react-native-get-random-values
+
+npx expo install react-native-safe-area-context
+
+npx expo install @gorhom/bottom-sheet react-native-reanimated react-native-gesture-handler
+
 
 TO GET YOUR APP ON IPHONE
 TURN ON DEVELOPER MODE ON IPHONE
@@ -23,3 +32,8 @@ npx expo start --dev-client
 TO REBUILD APP
 npx expo prebuild --clean
 npx expo run:ios --device
+
+TO PUSH TO GITHUB
+git add .
+git commit -m "Your Message"
+git push origin main

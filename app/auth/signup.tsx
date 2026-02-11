@@ -6,6 +6,8 @@ import { ThemedView } from '@/components/themed-view';
 import { useAuth } from '@/contexts/auth-context';
 import { TextInput, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { useThemeColor } from '@/hooks/use-theme-color';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+// ATTENTION FOR NOW SKIP EMAIL VERIFICATION MAKE SURE TO DISABLE THIS LATER
 
 export default function SignupScreen() {
   const [email, setEmail] = useState('');
@@ -13,6 +15,7 @@ export default function SignupScreen() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const { signUp } = useAuth();
+  const insets = useSafeAreaInsets();
   
   const backgroundColor = useThemeColor({}, 'background');
   const textColor = useThemeColor({}, 'text');
@@ -62,7 +65,7 @@ export default function SignupScreen() {
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      style={[styles.container, { backgroundColor }]}>
+      style={[styles.container, { backgroundColor, paddingTop: insets.top, paddingBottom: insets.bottom},]}>
       <ScrollView
         contentContainerStyle={styles.scrollContent}
         keyboardShouldPersistTaps="handled">
@@ -115,7 +118,7 @@ export default function SignupScreen() {
               onPress={handleSignup}
               disabled={loading}>
               {loading ? (
-                <ActivityIndicator color="#fff" />
+                <ActivityIndicator color={backgroundColor} />
               ) : (
                 <ThemedText style={[styles.buttonText, {color: backgroundColor}]}>Sign Up</ThemedText>
               )}
